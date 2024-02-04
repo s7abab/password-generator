@@ -1,7 +1,11 @@
-'use client'
+"use client";
 import React, { useState } from "react";
 import { copyToClipboard } from "./utils/clipboard";
-import { IPasswordOptions, generateRandomPassword } from "./utils/generate-password";
+import {
+  IPasswordOptions,
+  generateRandomPassword,
+} from "./utils/generate-password";
+import { useSession } from "next-auth/react";
 
 const Home = () => {
   const [passwordOptions, setPasswordOptions] = useState<IPasswordOptions>({
@@ -40,9 +44,15 @@ const Home = () => {
     });
   };
 
+  const { data: session, status } = useSession();
+
   return (
     <div className="">
       <div className="flex flex-col gap-4 justify-center items-center h-screen">
+        <h1 className="text-xl font-bold">
+          {" "}
+          {`Hello ${session?.user?.name}! 👋`}{" "}
+        </h1>
         <h1 className="font-serif text-2xl">Create Strong Passwords</h1>
         <input
           type="text"
@@ -84,7 +94,12 @@ const Home = () => {
             max={20}
             step={1}
             value={passwordOptions.length}
-            onChange={(e) => setPasswordOptions({ ...passwordOptions, length: parseInt(e.target.value) })}
+            onChange={(e) =>
+              setPasswordOptions({
+                ...passwordOptions,
+                length: parseInt(e.target.value),
+              })
+            }
           />
         </label>
         <button
