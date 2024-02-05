@@ -1,11 +1,13 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { copyToClipboard } from "./utils/clipboard";
 import {
   IPasswordOptions,
   generateRandomPassword,
 } from "./utils/generate-password";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import Header from "./components/Header";
 
 const Home = () => {
   const [passwordOptions, setPasswordOptions] = useState<IPasswordOptions>({
@@ -45,9 +47,17 @@ const Home = () => {
   };
 
   const { data: session, status } = useSession();
+  const router = useRouter();
 
+  useEffect(() => {
+    console.log(status);
+    if (status === "unauthenticated") {
+      router.push("/login");
+    }
+  }, [status, session, router]);
   return (
-    <div className="">
+    <>
+      <Header />
       <div className="flex flex-col gap-4 justify-center items-center h-screen">
         <h1 className="text-xl font-bold">
           {" "}
@@ -121,7 +131,7 @@ const Home = () => {
           Generate New Password
         </button>
       </div>
-    </div>
+    </>
   );
 };
 
