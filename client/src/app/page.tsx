@@ -8,6 +8,8 @@ import {
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Header from "./components/Header";
+import Passwords from "./components/Passwords";
+import SavePassword from "./components/SavePassword";
 
 const Home = () => {
   const [passwordOptions, setPasswordOptions] = useState<IPasswordOptions>({
@@ -64,12 +66,15 @@ const Home = () => {
           {`Hello ${session?.user?.name}! 👋`}{" "}
         </h1>
         <h1 className="font-serif text-2xl">Create Strong Passwords</h1>
-        <input
-          type="text"
-          value={password}
-          className="rounded-sm w-[500px] h-[50px] text-center text-xl font-semibold text-black"
-          readOnly
-        />
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={password}
+            className="rounded-sm w-[500px] h-[50px] text-center text-xl font-semibold text-black"
+            readOnly
+          />
+          <SavePassword password={password} />
+        </div>
         <div className="flex gap-2">
           <label>
             <input
@@ -118,7 +123,7 @@ const Home = () => {
             copyToClipboard(password);
             handleMarkCopied();
           }}
-          className={`bg-gray-700 text-white px-4 py-2 rounded ${
+          className={`bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded ${
             isCopied ? "bg-green-500" : ""
           }`}
         >
@@ -126,10 +131,12 @@ const Home = () => {
         </button>
         <button
           onClick={handleGeneratePassword}
-          className="bg-gray-700 text-white px-4 py-2 rounded"
+          className="bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded"
         >
           Generate New Password
         </button>
+        <h2 className="text-lg">Saved Passwords</h2>
+        <Passwords  />
       </div>
     </>
   );
